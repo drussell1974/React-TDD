@@ -1,6 +1,8 @@
 import React from 'react';
 
-export  const CustomerForm = ({firstName}) => <form id="customer">
+export const CustomerForm = ({ firstName, onSubmit }) => {
+    const customer = {firstName};
+    return <form id="customer" onSubmit={() => onSubmit(customer)}>
     <label htmlFor="firstName">First name</label>
     <input 
         readOnly
@@ -8,4 +10,5 @@ export  const CustomerForm = ({firstName}) => <form id="customer">
         name="firstName"
         id="firstName" 
         value={firstName}/>
-</form>;
+</form>
+};

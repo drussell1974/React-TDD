@@ -2,6 +2,7 @@ import React from 'react';
 import { createContainer } from './domManipulators';
 import { CustomerForm } from '../CustomerForm.js';
 import { italic } from 'ansi-colors';
+import ReactTestUtils from 'react-dom/test-utils';
 
 describe('CustomerForm', () => {
     let render, container;
@@ -55,4 +56,17 @@ describe('CustomerForm', () => {
         render(<CustomerForm />);
         expect(labelFor('firstName').textContent).toEqual('First name')
     })
+
+    it('save existing first name when submitted', async () => {
+        expect.assertions();
+        render(
+            <CustomerForm
+                firstName="Ashley"
+                onSubmit={({ firstName }) => 
+                    expect(firstName).toEqual('Ashley')
+                }
+            />
+        );
+        await ReactTestUtils.Simulate.submit(form('customer'));
+    });
 });
