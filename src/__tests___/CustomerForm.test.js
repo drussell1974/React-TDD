@@ -87,7 +87,7 @@ describe('CustomerForm', () => {
                 />
             ); 
             await ReactTestUtils.Simulate.change(field(fieldName), {
-                target: { value }
+                target: { value: 'newValue', name:fieldName }
             });
             await ReactTestUtils.Simulate.submit(form('customer'));
         })
@@ -105,7 +105,7 @@ describe('CustomerForm', () => {
 
         itSavesExistingValueWhenSubmitted("firstName", "Ashley");
 
-        itSavesNewValueWhenSubmited("firstName", "Ashley");
+        itSavesNewValueWhenSubmited("firstName", "newValue");
     })
 
     
@@ -121,6 +121,21 @@ describe('CustomerForm', () => {
 
         itSavesExistingValueWhenSubmitted("lastName", "Russell");
 
-        itSavesNewValueWhenSubmited("lastName", "Russell");
+        itSavesNewValueWhenSubmited("lastName", "newValue");
+    })
+
+    describe('phone number field', () => {
+        
+        itRendersAsATextbox("phoneNumber");
+        
+        itIncludesTheExistingValue("phoneNumber")
+
+        itRendersALabel("phoneNumber");
+
+        itAssignsAnIdThatMatchesTheLabelId("phoneNumber")
+
+        itSavesExistingValueWhenSubmitted("phoneNumber", "01234 567 890");
+
+        itSavesNewValueWhenSubmited("phoneNumber", "newValue");
     })
 });
