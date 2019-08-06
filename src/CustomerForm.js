@@ -4,6 +4,8 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit }) => 
     
     const [customer, setCustomer] = useState({ firstName, lastName, phoneNumber});
         
+    const handleSubmit = () => onSubmit(customer);
+
     const handleChanged = ({target}) => 
         setCustomer(customer => ({
             ...customer,
@@ -11,7 +13,7 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit }) => 
         }));
 
     return (
-        <form id="customer" onSubmit={() => onSubmit(customer)}>
+        <form id="customer" onSubmit={handleSubmit}>
             <label htmlFor="firstName">First name</label>
             <input 
                 type="text" 
@@ -33,6 +35,7 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit }) => 
                 id="phoneNumber" 
                 value={phoneNumber}
                 onChange={handleChanged}/>
+            <input type="submit" value="Add" />
         </form>
     )
 };
