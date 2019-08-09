@@ -1,12 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter, Route, withRouter } from 'react-router-dom';
 import {AppointmentsDayView} from './Appointment';
 import {sampleAppointments} from  './sampleData';
 
 import * as serviceWorker from './serviceWorker';
+import { AppointmentForm } from './AppointmentForm';
+
+const App = withRouter(({history}) => 
+    <AppointmentsDayView appointments={sampleAppointments} />
+);
+
+const AppointmentFormWrapper = withRouter(({history}) => 
+    <AppointmentForm />
+);
 
 ReactDOM.render(
-    <AppointmentsDayView appointments={sampleAppointments} />,
+    <BrowserRouter>
+        <React.Fragment>
+            <Route exact path="/" component={App} />
+            <Route path="/add" component={AppointmentFormWrapper} />
+            <Link to="/add">Add  an author</Link>
+        </React.Fragment>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 

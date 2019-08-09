@@ -1,6 +1,7 @@
 import React from 'react';
 import {createContainer} from './domManipulators';
 import {AppointmentForm} from '../AppointmentForm';
+import ReactTestUtils from 'react-dom/test-utils';
 import { italic } from 'ansi-colors';
 import { nothing } from 'immer';
 
@@ -69,5 +70,51 @@ describe('AppointmentForm', () => {
             );
             expect(option.selected).toBeTruthy();
         });
+
+        it('calls handleChange', async () => {
+            expect.assertions();
+            render(
+                <AppointmentForm 
+                    onChange={() => 
+                        expect('service').toEqual('Cut')
+                }/>
+            );
+            await ReactTestUtils.Simulate.change('appointment', {
+                target: { name:'service', name:'Cut' }
+            });
+            await ReactTestUtils.Simulate.submit(form('appointment'));
+        })
     })
+
+    const timeTableHelper = () => container.querySelector('table#time-slots');
+
+    describe('time slot table', () => {
+
+        const timeSlotTable = () => container.querySelector('table#time-slots');
+
+        it('renders a table for time slots', () => {
+            render(<AppointmentForm />);
+            expect(
+                timeTableHelper()
+            ).not.toBeNull
+        });
+
+        it('renders a time slot for every half hour between open and close times', () => {
+            render(<AppointmentForm salonOpensAt={9} salonClosesAt={10} />);
+            const timesOfDay = timeSlotTable().querySelectorAll(
+                'tbody >* th'
+            );
+            expect(timesOfDay).toHaveLength(2);
+            expect(timesOfDay[0].textContent).toEqual('09:00');
+            expect(timesOfDay[1].textContent).toEqual('09:30');
+        });
+
+        it('renders and empty cell at the start of the header row', () => {
+            render(<AppointmentForm />);
+            const headerRow = timeSlotTable(
+                'thead > tr'
+            );
+            expect(headerRow.firstChild.textContent).toEqual('');
+        })
+    });
 })
