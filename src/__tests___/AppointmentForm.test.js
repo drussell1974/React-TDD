@@ -109,12 +109,24 @@ describe('AppointmentForm', () => {
             expect(timesOfDay[1].textContent).toEqual('09:30');
         });
 
-        it('renders and empty cell at the start of the header row', () => {
+        it('renders an empty cell at the start of the header row', () => {
             render(<AppointmentForm />);
-            const headerRow = timeSlotTable(
+            const headerRow = timeSlotTable().querySelector(
                 'thead > tr'
-            );
+                );
             expect(headerRow.firstChild.textContent).toEqual('');
+        })
+
+        it('renders a week of available dates', () => {
+            const today = new Date(2019, 7, 31);
+            render(<AppointmentForm today={today} />);
+            const dates = timeSlotTable().querySelectorAll(
+                'thead >* th:not(:first-child)'
+            );
+            expect(dates).toHaveLength(7);
+            expect(dates[0].textContent).toEqual('Sat 31');
+            expect(dates[1].textContent).toEqual('Sun 01');
+            expect(dates[6].textContent).toEqual('Fri 06');
         })
     });
 })

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route, withRouter } from 'react-router-dom';
+import {BrowserRouter, Route, withRouter, Link } from 'react-router-dom';
 import {AppointmentsDayView} from './Appointment';
 import {sampleAppointments} from  './sampleData';
 
@@ -12,7 +12,7 @@ const App = withRouter(({history}) =>
 );
 
 const AppointmentFormWrapper = withRouter(({history}) => 
-    <AppointmentForm />
+    <AppointmentForm today="{new Date(2019, 8, 10)" />
 );
 
 ReactDOM.render(
@@ -20,7 +20,7 @@ ReactDOM.render(
         <React.Fragment>
             <Route exact path="/" component={App} />
             <Route path="/add" component={AppointmentFormWrapper} />
-            <Link to="/add">Add  an author</Link>
+            <Link to="/add">Add appointment</Link>
         </React.Fragment>
     </BrowserRouter>,
     document.getElementById('root')
