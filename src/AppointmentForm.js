@@ -46,6 +46,11 @@ const TimeTableSlot = ({salonOpensAt, salonClosesAt, today}) => {
                     {timeSlots.map(timeSlot => (
                         <tr key={timeSlot}>
                             <th>{toTimeValue(timeSlot)}</th>
+                            {dates.map((data) => (
+                                <td key={data}>
+                                    <input type="radio" />
+                                </td>
+                            ))}
                         </tr>
                     )) }
                 </tbody>

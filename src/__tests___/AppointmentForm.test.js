@@ -115,7 +115,7 @@ describe('AppointmentForm', () => {
                 'thead > tr'
                 );
             expect(headerRow.firstChild.textContent).toEqual('');
-        })
+        });
 
         it('renders a week of available dates', () => {
             const today = new Date(2019, 7, 31);
@@ -127,6 +127,28 @@ describe('AppointmentForm', () => {
             expect(dates[0].textContent).toEqual('Sat 31');
             expect(dates[1].textContent).toEqual('Sun 01');
             expect(dates[6].textContent).toEqual('Fri 06');
+        });
+
+        it('renders a radio button for each time slot', ()=> {
+            const today = new Date();
+            const availableTimeSlots = [
+                { startsAt: today.setHours(9, 0, 0, 0)},
+                { startsAt: today.setHours(9, 30, 0, 0)}
+            ];
+            render(
+                <AppointmentForm
+                    availableTimeSlots={availableTimeSlots}
+                    today={today}
+                />
+            );
+            const cells = timeSlotTable().querySelectorAll('td');
+            expect(cells).toHaveLength(140);
+            expect(
+                cells[0].querySelector('input[type="radio"]')
+            ).not.toBeNull();
+            expect(
+                cells[139].querySelector('input[type="radio"]')
+            ).not.toBeNull();
         })
     });
 })
