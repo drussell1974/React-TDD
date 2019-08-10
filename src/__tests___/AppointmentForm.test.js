@@ -147,8 +147,16 @@ describe('AppointmentForm', () => {
                 cells[0].querySelector('input[type="radio"]')
             ).not.toBeNull();
             expect(
-                cells[139].querySelector('input[type="radio"]')
+                cells[7].querySelector('input[type="radio"]')
             ).not.toBeNull();
+        });
+
+        it('does not renders radio buttons for unavailable time slots', () => {
+            render(<AppointmentForm availableTimeSlots={[]} />);
+            const timesOfDay = timeSlotTable().querySelectorAll(
+                'input'
+            );
+            expect(timesOfDay).toHaveLength(0);
         })
     });
 })

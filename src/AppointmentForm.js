@@ -30,7 +30,22 @@ const toShortDate = timestamp => {
     return `${day} ${dayOfMonth}`;
 }
 
-const TimeTableSlot = ({salonOpensAt, salonClosesAt, today}) => {
+const mergeDateAndTime = (date, timeSlot) => {
+    const time = new Date(timeSlot);
+    return new Date(date).setHours(
+        time.getHours(),
+        time.getMinutes(),
+        time.getSeconds(),
+        time.getMilliseconds()
+    );
+};
+
+const TimeSlotTable = ({
+        salonOpensAt, 
+        salonClosesAt, 
+        today, 
+        availableTimeSlots
+    }) => {
     const dates = weeklyDateValues(today);
     const timeSlots = dailyTimeSlots({salonOpensAt, salonClosesAt});
     return (<table id="time-slots">
@@ -46,9 +61,14 @@ const TimeTableSlot = ({salonOpensAt, salonClosesAt, today}) => {
                     {timeSlots.map(timeSlot => (
                         <tr key={timeSlot}>
                             <th>{toTimeValue(timeSlot)}</th>
-                            {dates.map((data) => (
-                                <td key={data}>
-                                    <input type="radio" />
+                            {dates.map((date) => (
+                                <td key={date}>
+                                    {availableTimeSlots.some(availableTimeSlot => 
+                                        availableTimeSlot.startsAt === mergeDateAndTime(date, timeSlot)
+                                        )
+                                        ? <input type="radio"/>
+                                        : null
+                                    }
                                 </td>
                             ))}
                         </tr>
@@ -57,7 +77,15 @@ const TimeTableSlot = ({salonOpensAt, salonClosesAt, today}) => {
             </table>)
 };
 
-export const AppointmentForm = ({selectableServices, service, handleChange, salonOpensAt, salonClosesAt, today}) => (
+export const AppointmentForm = ({
+        selectableServices, 
+        service, 
+        handleChange, 
+        salonOpensAt, 
+        salonClosesAt, 
+        today, 
+        availableTimeSlots
+    }) => (
     <form id="appointment">
         <select name="service" value={service} onChange={handleChange} readOnly>
             <option/>
@@ -65,11 +93,16 @@ export const AppointmentForm = ({selectableServices, service, handleChange, salo
                 <option key={s}>{s}</option>
             ))}
        </select>
-       <TimeTableSlot salonOpensAt={salonOpensAt} salonClosesAt={salonClosesAt} today={today} />
+       <TimeSlotTable 
+            salonOpensAt={salonOpensAt} 
+            salonClosesAt={salonClosesAt} 
+            today={today} 
+            availableTimeSlots={availableTimeSlots} />
     </form>
 );
 
 AppointmentForm.defaultProps = {
+    availableTimeSlots: [],
     today: new Date(),
     salonOpensAt: 9,
     salonClosesAt: 19,
