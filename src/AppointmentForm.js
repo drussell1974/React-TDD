@@ -43,16 +43,16 @@ const mergeDateAndTime = (date, timeSlot) => {
 const RadioButtonIfAvailable = ({
     availableTimeSlots,
     date,
-    timeSlot
+    checkedTimeSlot
 }) => {
-    const startsAt = mergeDateAndTime(date, timeSlot);
+    const startsAt = mergeDateAndTime(date, checkedTimeSlot);
 
     if(
         availableTimeSlots.some((availableTimeSlot) =>
             availableTimeSlot.startsAt === startsAt
         )
     ) {
-        const isChecked = false;
+        const isChecked = startsAt === checkedTimeSlot;
         return (
             <input
                 name="startsAt"
@@ -92,7 +92,7 @@ const TimeSlotTable = ({
                                     <RadioButtonIfAvailable
                                         availableTimeSlots={availableTimeSlots}
                                         date={date}
-                                        timeSlot={timeSlot}
+                                        checkedTimeSlot={timeSlot}
                                     />
                                 </td>
                             ))}
