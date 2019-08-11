@@ -146,10 +146,10 @@ describe('AppointmentForm', () => {
             );
             const cells = timeSlotTable().querySelectorAll('td');
             expect(
-                cells[0].querySelector('input')
+                cells[0].querySelector('input[type="radio"]')
             ).not.toBeNull();
             expect(
-                cells[7].querySelector('input')
+                cells[7].querySelector('input[type="radio"]')
             ).not.toBeNull();
         });
 

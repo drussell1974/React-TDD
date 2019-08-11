@@ -52,11 +52,13 @@ const RadioButtonIfAvailable = ({
             availableTimeSlot.startsAt === startsAt
         )
     ) {
+        const isChecked = false;
         return (
             <input
                 name="startsAt"
-                type="redio"
+                type="radio"
                 value={startsAt}
+                checked={isChecked}
                 readOnly
             />
         )
