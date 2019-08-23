@@ -4,6 +4,15 @@ import { CustomerForm } from '../CustomerForm.js';
 import { italic } from 'ansi-colors';
 import ReactTestUtils from 'react-dom/test-utils';
 
+const spy = () => {
+    let receivedArguments;
+    return {
+        fn: (...args) => (receivedArguments = args),
+        receivedArguments: () => receivedArguments,
+        receivedArgument: n => receivedArguments[n]
+    };
+};
+
 describe('CustomerForm', () => {
     let render, container;
 
@@ -22,7 +31,7 @@ describe('CustomerForm', () => {
             ).not.toBeNull();
     });
 
-    const expectToBeInputField = formElement => {
+    const expectToBeInputField = (formElement) => {
         expect(formElement).not.toBeNull();
         expect(formElement.tagName).toEqual('INPUT');
         expect(formElement.type).toEqual('text');
@@ -60,29 +69,30 @@ describe('CustomerForm', () => {
     }
 
     
-    const itSavesExistingValueWhenSubmitted = (fieldName, value) => {
-        it('save existing value when submitted', async () => {
-            expect.assertions();
+    const itSubmitsExistingValue = (fieldName) => {
+        it('saves existing value when submitted', async () => {
+            const submitSpy = spy();
+
             render(
                 <CustomerForm
-                    {...{[fieldName]: value} }
-                    onSubmit={props => 
-                        expect(props[fieldName]).toEqual(value)
-                    }
+                    {...{ [fieldName]: 'value'} }
+                    onSubmit={submitSpy.fn}
                 />
             );
-            await ReactTestUtils.Simulate.submit(form('customer'));
+            ReactTestUtils.Simulate.submit(form('customer'));
+            expect(submitSpy.receivedArguments()).toBeDefined();
+            expect(submitSpy.receivedArgument(0)[fieldName]).toEqual('value');
         });
     }
 
-    const itSavesNewValueWhenSubmited = (fieldName, value) => {
+    const itSavesNewValueWhenSubmited = fieldName => {
         it('save new value when submitted', async () => {
             expect.assertions();
             render(
                 <CustomerForm
                     {...{[fieldName]: 'existingValue'} }
                     onSubmit={props => 
-                        expect(props[fieldName]).toEqual(value)
+                        expect(props[fieldName]).toEqual('newValue')
                     }
                 />
             ); 
@@ -94,7 +104,7 @@ describe('CustomerForm', () => {
     }
 
     describe('first name field', () => {
-        
+
         itRendersAsATextbox("firstName");
 
         itIncludesTheExistingValue("firstName")
@@ -103,9 +113,9 @@ describe('CustomerForm', () => {
 
         itAssignsAnIdThatMatchesTheLabelId("firstName")
 
-        itSavesExistingValueWhenSubmitted("firstName", "Ashley");
+        itSubmitsExistingValue("firstName");
 
-        itSavesNewValueWhenSubmited("firstName", "newValue");
+        itSavesNewValueWhenSubmited("firstName");
     })
 
     
@@ -119,9 +129,9 @@ describe('CustomerForm', () => {
 
         itAssignsAnIdThatMatchesTheLabelId("lastName")
 
-        itSavesExistingValueWhenSubmitted("lastName", "Russell");
+        itSubmitsExistingValue("lastName");
 
-        itSavesNewValueWhenSubmited("lastName", "newValue");
+        itSavesNewValueWhenSubmited("lastName");
     })
 
     describe('phone number field', () => {
@@ -134,8 +144,8 @@ describe('CustomerForm', () => {
 
         itAssignsAnIdThatMatchesTheLabelId("phoneNumber")
 
-        itSavesExistingValueWhenSubmitted("phoneNumber", "01234 567 890");
+        itSubmitsExistingValue("phoneNumber");
 
-        itSavesNewValueWhenSubmited("phoneNumber", "newValue");
+        itSavesNewValueWhenSubmited("phoneNumber");
     })
 });

@@ -70,20 +70,6 @@ describe('AppointmentForm', () => {
             );
             expect(option.selected).toBeTruthy();
         });
-
-        it('calls handleChange', async () => {
-            expect.assertions();
-            render(
-                <AppointmentForm 
-                    onChange={() => 
-                        expect('service').toEqual('Cut')
-                }/>
-            );
-            await ReactTestUtils.Simulate.change('appointment', {
-                target: { name:'service', name:'Cut' }
-            });
-            await ReactTestUtils.Simulate.submit(form('appointment'));
-        })
     })
 
     const timeTableHelper = () => container.querySelector('table#time-slots');
@@ -92,8 +78,15 @@ describe('AppointmentForm', () => {
 
         const timeSlotTable = () => container.querySelector('table#time-slots');
         
-        const startsAtField = index => 
+        const startsAtField = (index) => 
             container.querySelectorAll(`input[name="startsAt"]`)[index];
+
+        const today = new Date();
+
+        const availableTimeSlots = [
+            {startsAt: today.setHours(9, 0, 0, 0)},
+            {startsAt: today.setHours(9, 30, 0, 0)}
+        ];
 
         it('renders a table for time slots', () => {
             render(<AppointmentForm />);
@@ -133,11 +126,7 @@ describe('AppointmentForm', () => {
         });
 
         it('renders a radio button for each time slot', ()=> {
-            const today = new Date();
-            const availableTimeSlots = [
-                { startsAt: today.setHours(9, 0, 0, 0)},
-                { startsAt: today.setHours(9, 30, 0, 0)}
-            ];
+
             render(
                 <AppointmentForm
                     availableTimeSlots={availableTimeSlots}
@@ -162,11 +151,7 @@ describe('AppointmentForm', () => {
         });
 
         it('sets radio button values to the index of the corresponding appointment', () => {
-            const today = new Date();
-            const availableTimeSlots = [
-                {startsAt: today.setHours(9, 0, 0, 0)},
-                {startsAt: today.setHours(9, 30, 0, 0)}
-            ];
+            
             render(
                 <AppointmentForm
                     availableTimeSlots={availableTimeSlots}
@@ -182,16 +167,11 @@ describe('AppointmentForm', () => {
 
         it('saves new value when submitted', async () => {
             expect.assertions();
-            const today = new Date();
-            const availableTimeSlots = [
-                {startsAt: today.setHours(9, 0, 0, 0)},
-                {startsAt: today.setHours(9, 30, 0, 0)}
-            ];
             render(
                 <AppointmentForm
                     availableTimeSlots={availableTimeSlots}
                     today={today}
-                    startsAt={availableTimeSlots[0].startsAt}
+                    startsAt={availableTimeSlots[1].startsAt}
                     onSubmit={({startsAt}) => 
                         expect(startsAt).toEqual(availableTimeSlots[1].startsAt)    
                     }

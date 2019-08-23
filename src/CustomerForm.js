@@ -35,7 +35,7 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit }) => 
                 id="phoneNumber" 
                 value={phoneNumber}
                 onChange={handleChanged}/>
-            <input type="submit" value="Add" />
+            <input type="submit" value="Add" onSubmit={handleSubmit} />
         </form>
     )
 };

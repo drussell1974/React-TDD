@@ -11,8 +11,18 @@ const App = withRouter(({history}) =>
     <AppointmentsDayView appointments={sampleAppointments} />
 );
 
+const today = new Date();
+
+const availableTimeSlots = [
+    {startsAt: today.setHours(9, 0, 0, 0)},
+    {startsAt: today.setHours(9, 30, 0, 0)}
+]
+
 const AppointmentFormWrapper = withRouter(({history}) => 
-    <AppointmentForm today="{new Date(2019, 8, 10)" />
+    <AppointmentForm 
+        today={new Date(2019, 8, 10)} 
+        startsAt={availableTimeSlots[0].startsAt}
+        availableTimeSlots={availableTimeSlots} />
 );
 
 ReactDOM.render(
