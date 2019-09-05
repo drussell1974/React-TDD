@@ -25,12 +25,21 @@ expect.extend({
     }
 });
 
+const originalFetch = window.fetch;
+let fetchSpy;
+
 describe('CustomerForm', () => {
     let render, container;
 
     const form = id => container.querySelector(`form[id=${id}]`);
     beforeEach(() => {
         ({render, container} = createContainer());
+        fetchSpy = spy();
+        window.fetch = fetchSpy.fn;
+    });
+
+    afterEach(() => {
+        window.fetch = originalFetch;
     });
 
     const labelFor = formElement =>
@@ -51,11 +60,9 @@ describe('CustomerForm', () => {
     });
 
     it('calls fetch with the right properties when submitting data', async () => {
-        const fetchSpy = spy();
         render(
             <CustomerForm 
                 fetch={fetchSpy.fn} 
-                //onSubmit={()=>{}} 
             />
         );
         ReactTestUtils.Simulate.submit(form('customer'));
@@ -109,8 +116,6 @@ describe('CustomerForm', () => {
     
     const itSubmitsExistingValue = fieldName => {
         it('saves existing value when submitted', async () => {
-            const fetchSpy = spy();
-
             render(
                 <CustomerForm
                     {...{ [fieldName]: 'value'} }
@@ -127,14 +132,11 @@ describe('CustomerForm', () => {
 
     const itSavesNewValueWhenSubmited = fieldName => {
         it('save new value when submitted', async () => {
-            const fetchSpy = spy();
-
             expect.assertions();
             render(
                 <CustomerForm
                     {...{[fieldName]: 'existingValue'} }
                     fetch = {fetchSpy.fn}
-                    //onSubmit={() => {}}
                 />
             );
             ReactTestUtils.Simulate.change(field(fieldName), {

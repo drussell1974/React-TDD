@@ -21,7 +21,7 @@ const availableTimeSlots = [
 
 const CustomerFormWrapper = withRouter(({history}) =>
     <CustomerForm customers={sampleCustomers} />
-);}
+);
 
 const AppointmentFormWrapper = withRouter(({history}) => 
     <AppointmentForm 

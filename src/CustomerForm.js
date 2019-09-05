@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit, fetch }) => {
+export const CustomerForm = ({ firstName, lastName, phoneNumber }) => {
     
     const [customer, setCustomer] = useState({ firstName, lastName, phoneNumber});
     
     const handleSubmit = () => {
-        onSubmit(customer);
-        fetch('/customers', {
+        window.fetch('/customers', {
             body: JSON.stringify(customer),
             method: 'POST',
             credentials: 'same-origin',
@@ -21,9 +20,7 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit, fetch
         }));
 
     return (
-        <form id="customer" 
-            onSubmit={handleSubmit}
-            >
+        <form id="customer" onSubmit={handleSubmit} >
             <label htmlFor="firstName">First name</label>
             <input 
                 type="text" 
@@ -45,17 +42,7 @@ export const CustomerForm = ({ firstName, lastName, phoneNumber, onSubmit, fetch
                 id="phoneNumber" 
                 value={phoneNumber}
                 onChange={handleChanged}/>
-            <input type="submit" value="Add" 
-                onSubmit={handleSubmit} 
-                />
+            <input type="submit" value="Add" />
         </form>
     )
 };
-
-CustomerForm.defaultProps = {
-    firstName:"", 
-    lastName:"", 
-    phoneNumber:"",
-    onSubmit: async () => {},
-    fetch: async () => {}
-}
