@@ -13,3 +13,7 @@ export const sampleAppointments = [
     { startsAt: at(16), customer: {firstName:'Jules', surname:'Trent'}},
     { startsAt: at(17), customer: {firstName:'Stevie', surname:'Olsen'}},
 ];
+
+export const customers = [
+    {firstName:"dave", lastName:"russell", phoneNumber:"07500860081"}
+];

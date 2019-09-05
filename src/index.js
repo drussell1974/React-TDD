@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, withRouter, Link } from 'react-router-dom';
+import {CustomerForm} from './CustomerForm';
 import {AppointmentsDayView} from './Appointment';
-import {sampleAppointments} from  './sampleData';
+import {sampleAppointments, sampleCustomers} from  './sampleData';
 
 import * as serviceWorker from './serviceWorker';
 import { AppointmentForm } from './AppointmentForm';
@@ -18,6 +19,10 @@ const availableTimeSlots = [
     {startsAt: today.setHours(9, 30, 0, 0)}
 ]
 
+const CustomerFormWrapper = withRouter(({history}) =>
+    <CustomerForm customers={sampleCustomers} />
+);}
+
 const AppointmentFormWrapper = withRouter(({history}) => 
     <AppointmentForm 
         today={new Date(2019, 8, 10)} 
@@ -30,7 +35,9 @@ ReactDOM.render(
         <React.Fragment>
             <Route exact path="/" component={App} />
             <Route path="/add" component={AppointmentFormWrapper} />
+            <Route path="/add_customer" component={CustomerFormWrapper} />
             <Link to="/add">Add appointment</Link>
+            <Link to="/add_customer">Add customer</Link>
         </React.Fragment>
     </BrowserRouter>,
     document.getElementById('root')
